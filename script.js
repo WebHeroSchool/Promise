@@ -82,4 +82,4 @@ Promise.all([dataPromise(), getDate])
     addDate();
     hello()
 }) 
-.catch(err => console.log('Page is not defined :c'));
+.catch(err => alert('Page is not defined :c'));
