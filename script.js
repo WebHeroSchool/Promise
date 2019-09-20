@@ -81,5 +81,6 @@ Promise.all([dataPromise(), getDate])
     addAvatar();
     addDate();
     hello()
-}) 
-.catch(err => alert('Page is not defined :c'));
+    
+    .catch(err => alert('Page is not defined :c'));
+})
