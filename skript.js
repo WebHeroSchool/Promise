@@ -1,8 +1,5 @@
+date = Date();
 let body = document.body;
-let url = window.location.toString();
-let date = new Date();
-let requestForPromise, dateForPromise;
-
 
 function hello() {
 	setTimeout(function() {
@@ -13,75 +10,67 @@ function hello() {
   	preloader.classList.add('done');
     loader.classList.add('done');
   }
-  }, 1000);
+  }, 2000);
 }
 
+const name = 'SveSvet';
+const url = 'https://api.github.com/users/';
+
+const getName = new Promise((resolve, reject) => {
+	setTimeout(() => name ? resolve(name) : reject('Name not found'), 3000);
+});
 
 
-let getUsername = (url) => {
-    let splitOfUrl = url.split('=');
-    let getMyUsername = splitOfUrl[1];
-    if (getMyUsername == undefined) {
-        getMyUsername = 'SveSvet';
-    }
-    return getMyUsername;
-}
+const getUrl = new Promise((resolve, reject) => {
+	setTimeout(() => url ? resolve(url) : reject('url not found'), 2000);
+});
 
-let getDate = new Promise((resolve, reject) => 
-setTimeout(() => date ? 
-resolve(date) : reject('Date is not defined'), 2000)
-);
-
-function dataPromise() {
-    let getInfo = fetch(`https://api.github.com/users/${getUsername(url)}`);
-    let promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(getInfo);
-            reject('error');
-        }, 3000)
-    })
-    return promise;
-}
-
-
-Promise.all([dataPromise(), getDate])
-    .then(([request, date]) => {
-    requestForPromise = request;
-    dateForPromice = date;
-})
-    .then(res => requestForPromise.json())
-    .then(user => {
+	Promise.all([getName, getUrl])
+  .then(([name, url]) => fetch(`${url}${name}`))
+  .then(res => res.json())
+   .then (user => {
     userAvatar = user.avatar_url;
     userBio = user.bio;
     userUrl = user.url;
-    
-    let addUsername = () => {
+        
+    if (user.id != undefined) {
+    const addUsername = () => {
         let user = document.createElement('h1');
-        user.innerHTML = `${getUsername(url)}`;
+        user.innerHTML = name;
         body.appendChild(user);
     }
     
-    let addBio = () => {
+    const addBio = () => {
         const bio = document.createElement('p');
         bio.innerHTML = `${userBio}`;
         body.appendChild(bio);
     }
     
-    let addAvatar = () => {
+    const addAvatar = () => {
         const avatar = document.createElement('img');
         avatar.src = this.userAvatar;
         body.appendChild(avatar);
     }
-
+    
     let addDate = () => {
     let dateInHTML = document.createElement('h2');
-    dateInHTML.innerHTML = dateForPromice;
+    dateInHTML.innerHTML = date;
     body.appendChild(dateInHTML);
+        
     }
+    
     addUsername();
     addBio();
     addAvatar();
     addDate();
     hello()
+    }
+    
+    else {
+        
+    alert('Вы ввели несуществующего пользователя!');
+        
+    }
+        
 }) 
-.catch(err => console.log('Page is not defined :c'));
+ .catch(err => alert(err + ' Профиль не найден'));

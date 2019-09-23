@@ -19,15 +19,23 @@ let getUsername = (url) => {
     let splitOfUrl = url.split('=');
     let getMyUsername = splitOfUrl[1];
     if (getMyUsername == undefined) {
-        getMyUsername = 'SveSvet';
+        getMyUsername = '';
     }
-    return getMyUsername;
+    return getMyUsername
 }
+
+let name = getUsername(url);
+
+const getName = new Promise((resolve, reject) => {
+	setTimeout(() => name ? resolve(name) : reject('Name not found'), 3000);
+});
+
 
 let getDate = new Promise((resolve, reject) => 
 setTimeout(() => date ? 
 resolve(date) : reject('Date is not defined'), 2000)
 );
+
 function dataPromise() {
     let getInfo = fetch(`https://api.github.com/users/${getUsername(url)}`);
     let promise = new Promise((resolve, reject) => {
@@ -39,7 +47,6 @@ function dataPromise() {
     return promise;
 }
 
-let name = getUsername(url);
 
 Promise.all([dataPromise(), getDate])
     .then(([request, date]) => {
@@ -51,7 +58,7 @@ Promise.all([dataPromise(), getDate])
     userAvatar = user.avatar_url;
     userBio = user.bio;
     userUrl = user.url;
-    if (name) {
+    if (name != '') {
         
     let addUsername = () => {
         let user = document.createElement('h1');
@@ -82,9 +89,12 @@ Promise.all([dataPromise(), getDate])
     addDate();
     hello()
     }
+    
     else {
-         alert('User is not defined')
          alert('User with this name not defined')
     }
     
 }) 
+
+ .catch(err => alert(err + ' Профиль не найден'));
+
