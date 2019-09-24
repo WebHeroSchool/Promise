@@ -2,8 +2,6 @@ let body = document.body;
 let url = window.location.toString();
 let date = new Date();
 let requestForPromise, dateForPromise;
-
-
 function hello() {
 	setTimeout(function() {
   let preloader = document.getElementById('preloader');
@@ -15,17 +13,21 @@ function hello() {
   }
   }, 1000);
 }
-
-
-
 let getUsername = (url) => {
     let splitOfUrl = url.split('=');
     let getMyUsername = splitOfUrl[1];
     if (getMyUsername == undefined) {
-        getMyUsername = 'SveSvet';
+          getMyUsername = 'SveSvet';
     }
-    return getMyUsername;
+    return getMyUsername
 }
+
+let name = getUsername(url);
+
+const getName = new Promise((resolve, reject) => {
+	setTimeout(() => name ? resolve(name) : reject('Name not found'), 3000);
+});
+
 
 let getDate = new Promise((resolve, reject) => 
 setTimeout(() => date ? 
@@ -42,8 +44,6 @@ function dataPromise() {
     })
     return promise;
 }
-
-
 Promise.all([dataPromise(), getDate])
     .then(([request, date]) => {
     requestForPromise = request;
@@ -55,6 +55,9 @@ Promise.all([dataPromise(), getDate])
     userBio = user.bio;
     userUrl = user.url;
     
+    
+    if (user.id != undefined) {
+
     let addUsername = () => {
         let user = document.createElement('h1');
         user.innerHTML = `${getUsername(url)}`;
@@ -72,16 +75,21 @@ Promise.all([dataPromise(), getDate])
         avatar.src = this.userAvatar;
         body.appendChild(avatar);
     }
-
     let addDate = () => {
     let dateInHTML = document.createElement('h2');
     dateInHTML.innerHTML = dateForPromice;
     body.appendChild(dateInHTML);
     }
+    
     addUsername();
     addBio();
     addAvatar();
     addDate();
     hello()
-}) 
-.catch(err => console.log('Page is not defined :c'));
+    }
+    else {
+        alert('User with this name not defined')
+    }
+    }) 
+
+ .catch(err => alert(err + ' Профиль не найден'));
